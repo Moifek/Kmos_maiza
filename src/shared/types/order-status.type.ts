@@ -1,0 +1,21 @@
+export const ORDER_STATUS = {
+  RECEIVED: 'received',
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected',
+  PREPARING: 'preparing',
+  READY: 'ready',
+  CANCELLED: 'cancelled',
+  COMPLETED: 'completed',
+} as const;
+
+export type OrderStatus = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS];
+
+export const ORDER_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
+  [ORDER_STATUS.RECEIVED]: [ORDER_STATUS.ACCEPTED, ORDER_STATUS.REJECTED],
+  [ORDER_STATUS.ACCEPTED]: [ORDER_STATUS.PREPARING, ORDER_STATUS.CANCELLED],
+  [ORDER_STATUS.PREPARING]: [ORDER_STATUS.READY, ORDER_STATUS.CANCELLED],
+  [ORDER_STATUS.READY]: [ORDER_STATUS.COMPLETED, ORDER_STATUS.CANCELLED],
+  [ORDER_STATUS.REJECTED]: [],
+  [ORDER_STATUS.CANCELLED]: [],
+  [ORDER_STATUS.COMPLETED]: [],
+} as const;
